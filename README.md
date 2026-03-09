@@ -81,12 +81,6 @@ Gandhi, U., Bustany, I., Swartz, W., & Behjat, L. (2019). A reinforcement learni
 
 ## Authors
 
-- Deriech Cummings II — ECE Department, NC A&T State University
-- Gloria Riechi — CDSE Department, NC A&T State University  
-- Natnael Workneh — ECE Department, NC A&T State University
-
-## Authors
-
-- Deriech Cummings II — ECE Department, NC A&T State University
-- Gloria Riechi — CDSE Department, NC A&T State University  
-- Natnael Workneh — ECE Department, NC A&T State University
+- Deriech Cummings II ECE Department, NC A&T State University
+- Gloria Riechi CDSE Department, NC A&T State University  
+- Natnael Workneh ECE Department, NC A&T State University
