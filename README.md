@@ -1,6 +1,6 @@
 # RL-Based Physical Design Router
 
-A reinforcement learning framework for integrated circuit (IC) routing based on the cooperative two-agent architecture proposed by Gandhi et al. (2019). Implemented as a course project for COMP841 at North Carolina Agricultural and Technical State University.
+A reinforcement learning framework for integrated circuit (IC) routing based on the cooperative two-agent architecture proposed by Gandhi et al. (2019).
 
 ## Overview
 
@@ -34,11 +34,11 @@ The RL pipeline matches A* completion rate while achieving shorter average wirel
 ```
 COMP841-FinalProject/
 ├── routing_env.py              # Grid environment, A*, state tensor, reward
-├── phase1_routing_env.ipynb    # Environment setup and validation
-├── phase2_dataset_generation.ipynb  # Dataset generation
-├── phase3_cleaner_cnn.ipynb    # Cleaner CNN training (supervised)
-├── phase4_router_reinforce.ipynb    # Router REINFORCE + MCTS
-├── phase5_cotraining.ipynb     # Co-training and evaluation
+├── routing_env.ipynb           # Environment setup and validation
+├── dataset_generation.ipynb    # Dataset generation
+├── cleaner_cnn.ipynb           # Cleaner CNN training (supervised)
+├── router_reinforce.ipynb      # Router REINFORCE + MCTS
+├── cotraining.ipynb            # Co-training and evaluation
 ├── checkpoints/
 │   ├── cleaner_best.pt         # Best Cleaner CNN weights
 │   ├── router_best.pt          # Best Router CNN weights (REINFORCE)
@@ -119,11 +119,11 @@ The RL pipeline matches A* completion rate while achieving shorter average wirel
 ```
 COMP841-FinalProject/
 ├── routing_env.py              # Grid environment, A*, state tensor, reward
-├── phase1_routing_env.ipynb    # Environment setup and validation
-├── phase2_dataset_generation.ipynb  # Dataset generation
-├── phase3_cleaner_cnn.ipynb    # Cleaner CNN training (supervised)
-├── phase4_router_reinforce.ipynb    # Router REINFORCE + MCTS
-├── phase5_cotraining.ipynb     # Co-training and evaluation
+├── routing_env.ipynb    # Environment setup and validation
+├── dataset_generation.ipynb  # Dataset generation
+├── cleaner_cnn.ipynb    # Cleaner CNN training (supervised)
+├── router_reinforce.ipynb    # Router REINFORCE + MCTS
+├── cotraining.ipynb     # Co-training and evaluation
 ├── checkpoints/
 │   ├── cleaner_best.pt         # Best Cleaner CNN weights
 │   ├── router_best.pt          # Best Router CNN weights (REINFORCE)
