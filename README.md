@@ -83,9 +83,7 @@ Gandhi, U., Bustany, I., Swartz, W., & Behjat, L. (2019). A reinforcement learni
 
 - Deriech Cummings II — ECE Department, NC A&T State University
 - Gloria Riechi — CDSE Department, NC A&T State University  
-- Natnael Workneh — ECE Department, NC A&T State University# RL-Based Physical Design Router
-
-of large test sets. *ACM/IEEE 1st Workshop on Machine Learning for CAD (MLCAD)*, pp. 1–6.
+- Natnael Workneh — ECE Department, NC A&T State University
 
 ## Authors
 
