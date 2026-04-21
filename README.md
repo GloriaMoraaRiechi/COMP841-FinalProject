@@ -6,8 +6,8 @@ A reinforcement learning framework for integrated circuit (IC) routing based on 
 
 Routing in physical design is the process of connecting logic gates with wires while minimizing wire length and avoiding design rule violations. This project frames routing as a two-player cooperative game between two CNN agents:
 
-- **Cleaner** — identifies the net most responsible for routing conflicts and removes it
-- **Router** — re-routes the removed net using a REINFORCE-trained policy guided by MCTS at inference
+- **Cleaner**: identifies the net most responsible for routing conflicts and removes it
+- **Router**: re-routes the removed net using a REINFORCE-trained policy guided by MCTS at inference
 
 ## Architecture
 
