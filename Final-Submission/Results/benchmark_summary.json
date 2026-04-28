@@ -1,0 +1,134 @@
+{
+  "meta": {
+    "num_instances": 20000,
+    "grid_sizes": [
+      10
+    ],
+    "num_nets_choices": [
+      5
+    ],
+    "min_manhattan": 3,
+    "seed": 42,
+    "cleaner_channels": 12,
+    "router_channels": 9
+  },
+  "test_cases": 200,
+  "cleaner_metrics": {
+    "test_top1_acc": NaN,
+    "test_mrr": NaN,
+    "test_overlap_drop_hit": NaN
+  },
+  "router_metrics": {
+    "test_step_acc": NaN,
+    "test_value_mse": NaN
+  },
+  "rl_effect": {
+    "greedy_pre": 0.92,
+    "greedy_post": 0.84,
+    "pipeline_comp_pre": 0.42,
+    "pipeline_comp_post": 0.45,
+    "pipeline_overlap_pre": 1.84,
+    "pipeline_overlap_post": 1.785
+  },
+  "ablation": [
+    {
+      "label": "Cleaner only",
+      "method": "learned_cleaner_astar_router",
+      "uses_rl": true,
+      "completion_rate": 0.415,
+      "avg_overlap_before": 4.26,
+      "avg_overlap_after": 1.845,
+      "avg_wirelength_before": 36.165,
+      "avg_wirelength_after": 39.885
+    },
+    {
+      "label": "Router only",
+      "method": "astar_cleaner_learned_router",
+      "uses_rl": true,
+      "completion_rate": 0.285,
+      "avg_overlap_before": 4.26,
+      "avg_overlap_after": 2.89,
+      "avg_wirelength_before": 36.165,
+      "avg_wirelength_after": 38.435
+    },
+    {
+      "label": "Learned Pipeline (no RL)",
+      "method": "learned_cleaner_learned_router",
+      "uses_rl": false,
+      "completion_rate": 0.42,
+      "avg_overlap_before": 4.26,
+      "avg_overlap_after": 1.84,
+      "avg_wirelength_before": 36.165,
+      "avg_wirelength_after": 39.945
+    },
+    {
+      "label": "Learned Pipeline (with RL)",
+      "method": "learned_cleaner_learned_router",
+      "uses_rl": true,
+      "completion_rate": 0.45,
+      "avg_overlap_before": 4.26,
+      "avg_overlap_after": 1.785,
+      "avg_wirelength_before": 36.165,
+      "avg_wirelength_after": 40.225
+    }
+  ],
+  "methods": {
+    "initial": {
+      "method": "initial",
+      "cases": 200,
+      "completion_rate": 0.045,
+      "avg_overlap_before": 4.26,
+      "avg_overlap_after": 4.26,
+      "avg_wirelength_before": 36.165,
+      "avg_wirelength_after": 36.165,
+      "per_grid": {
+        "10": {
+          "cases": 200,
+          "completion_rate": 0.045,
+          "avg_overlap_after": 4.26,
+          "avg_wirelength_after": 36.165
+        }
+      },
+      "label": "A*",
+      "time_seconds": 0.12493681907653809
+    },
+    "pathfinder": {
+      "method": "pathfinder",
+      "cases": 200,
+      "completion_rate": 0.325,
+      "avg_overlap_before": 4.26,
+      "avg_overlap_after": 1.055,
+      "avg_wirelength_before": 36.165,
+      "avg_wirelength_after": 38.385,
+      "per_grid": {
+        "10": {
+          "cases": 200,
+          "completion_rate": 0.325,
+          "avg_overlap_after": 1.055,
+          "avg_wirelength_after": 38.385
+        }
+      },
+      "label": "PathFinder",
+      "time_seconds": 2.735520839691162
+    },
+    "learned_cleaner_learned_router": {
+      "method": "learned_cleaner_learned_router",
+      "cases": 200,
+      "completion_rate": 0.45,
+      "avg_overlap_before": 4.26,
+      "avg_overlap_after": 1.785,
+      "avg_wirelength_before": 36.165,
+      "avg_wirelength_after": 40.225,
+      "per_grid": {
+        "10": {
+          "cases": 200,
+          "completion_rate": 0.45,
+          "avg_overlap_after": 1.785,
+          "avg_wirelength_after": 40.225
+        }
+      },
+      "label": "Learned pipeline",
+      "time_seconds": 133.77258205413818
+    }
+  }
+}
