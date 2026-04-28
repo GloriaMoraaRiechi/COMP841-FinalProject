@@ -35,7 +35,7 @@ Based on what worked at 10k-instance scale:
 - **`--cleaner_epochs 30`**: Cleaner saturates around 96-97% top-1 by epoch 25-30. No reason to go past 30; the loss gets to 0.005 and val accuracy
   plateaus.
 - **`--router_epochs 25`**: Router SL plateaus at 97-98% step accuracy by epoch 20-25. Going past 25 just memorises the training set.
-- **`--cleaner_width 32` / `--router_width 32`** — Width 32 is enough at this problem scale. 24 is a touch noisy, 32 is stable. Wider doesn't help.
+- **`--cleaner_width 32` / `--router_width 32`**: Width 32 is enough at this problem scale. 24 is a touch noisy, 32 is stable. Wider doesn't help.
 - **`--rl_episodes 1500`**: In your previous 1000-episode run RL diverged past episode 750 (greedy success crashed). With the lower LR + higher BC
   coefficient below, 1500 episodes should remain stable and squeeze out more improvement.
 - **`--rl_lr 2e-5`**: At `1e-4` (the previous default) RL was diverging.`2e-5` keeps gradients small enough to refine without breaking the SL
