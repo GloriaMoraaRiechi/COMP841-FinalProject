@@ -87,32 +87,55 @@ The CNN components are implemented using the custom NumPy neural network framewo
 
 The final benchmark used **200 fixed-seed test cases** from a 20,000-instance run.
 
-### Method Comparison
+## Results
 
-| Method | Completion Rate | Avg Overlap After | Avg Wirelength After | Runtime |
-|---|---:|---:|---:|---:|
-| Initial A* | 4.5% | 4.260 | 36.165 | 0.12 s |
-| PathFinder | 32.5% | 1.055 | 38.385 | 2.74 s |
-| **Learned Pipeline** | **45.0%** | 1.785 | 40.225 | 133.77 s |
+### Completion Rate (higher is better)
 
-### Ablation Study
+- A*: 0.04  
+- Pathfinder: 0.33  
+- Full Pipeline: 0.45  
 
-| Configuration | Completion Rate | Avg Overlap Before | Avg Overlap After | Avg Wirelength After |
-|---|---:|---:|---:|---:|
-| Cleaner only | 41.5% | 4.260 | 1.845 | 39.885 |
-| Router only | 28.5% | 4.260 | 2.890 | 38.435 |
-| Learned Pipeline, no RL | 42.0% | 4.260 | 1.840 | 39.945 |
-| **Learned Pipeline, with RL** | **45.0%** | 4.260 | **1.785** | 40.225 |
+The learned pipeline achieves the highest completion rate, outperforming both A* and Pathfinder.
 
-### RL Effect
+---
 
-| Metric | Before RL | After RL |
-|---|---:|---:|
-| Greedy router success | 92.0% | 84.0% |
-| Pipeline completion | 42.0% | 45.0% |
-| Pipeline average overlap | 1.840 | 1.785 |
+### Overlap (lower is better)
 
-The final RL-enhanced learned pipeline improved completion from **42.0% to 45.0%** and reduced average overlap from **1.840 to 1.785** compared with the supervised-only learned pipeline. The Cleaner CNN contributed the strongest individual improvement, while REINFORCE provided a modest but measurable gain when added to the full learned pipeline.
+- A*: 4.26  
+- Pathfinder: 1.05  
+- Full Pipeline: 1.78  
+
+The pipeline significantly reduces routing conflicts, though Pathfinder achieves the lowest overlap.
+
+---
+
+### Wirelength
+
+- A*: 36.2  
+- Pathfinder: 38.4  
+- Full Pipeline: 40.2  
+
+The learned approach results in higher wirelength, indicating a tradeoff between completion and efficiency.
+
+---
+
+### Model Accuracy
+
+- Cleaner: 95.0% (test)  
+- Router: 95.7% (test)  
+
+Both models demonstrate strong predictive performance.
+
+---
+
+## Discussion
+
+The results highlight a key tradeoff in routing:
+
+- Classical methods optimize local path efficiency  
+- The RL pipeline prioritizes global solvability  
+
+The learned system is able to solve more routing instances at the cost of slightly longer paths. This makes it more suitable for complex routing scenarios where feasibility is more important than optimality.
 
 ---
 
@@ -211,6 +234,12 @@ python main.py --num_instances 5000 --cleaner_epochs 15 --router_epochs 15 --rl_
 ## Interpretation
 
 The results show that the learned pipeline improves routing completion compared with both initial A* routing and PathFinder on the final benchmark. PathFinder achieves the lowest residual overlap, but the full learned pipeline achieves the highest completion rate. The ablation confirms that the Cleaner CNN is the largest contributor, while the Router CNN and REINFORCE fine-tuning provide additional improvement when combined into the final pipeline.
+
+---
+
+## Conclusion
+
+The Cleaner–Router reinforcement learning pipeline improves routing completion compared to traditional methods. While it introduces a wirelength tradeoff, it demonstrates strong potential for handling complex routing problems.
 
 ---
 
