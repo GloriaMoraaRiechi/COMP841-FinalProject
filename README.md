@@ -89,7 +89,7 @@ The final benchmark used **200 fixed-seed test cases** from a 20,000-instance ru
 
 ## Results
 
-### Completion Rate (higher is better)
+### Completion Rate
 
 - A*: 0.04  
 - Pathfinder: 0.33  
