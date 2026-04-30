@@ -1,0 +1,38 @@
+{
+  "meta": {
+    "num_instances": 20000,
+    "grid_sizes": [
+      10
+    ],
+    "num_nets_choices": [
+      5
+    ],
+    "min_manhattan": 3,
+    "seed": 42,
+    "cleaner_channels": 12,
+    "router_channels": 9
+  },
+  "splits": {
+    "train": {
+      "instances": 15840,
+      "cleaner_items": 75145,
+      "router_items": 161905,
+      "instances_with_overlap": 15029,
+      "instances_with_router_signal": 14240
+    },
+    "val": {
+      "instances": 3960,
+      "cleaner_items": 18955,
+      "router_items": 41315,
+      "instances_with_overlap": 3791,
+      "instances_with_router_signal": 3606
+    },
+    "test": {
+      "instances": 200,
+      "cleaner_items": 955,
+      "router_items": 2053,
+      "instances_with_overlap": 191,
+      "instances_with_router_signal": 181
+    }
+  }
+}
