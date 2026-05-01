@@ -1,0 +1,35 @@
+{
+  "config": {
+    "stage": "RL",
+    "metric": "reward",
+    "epochs": 20,
+    "episodes_per_epoch": 30,
+    "lr": 0.0001,
+    "gamma": 0.95,
+    "entropy_coef": 0.01,
+    "value_coef": 0.5,
+    "bc_coef": 0.3
+  },
+  "epochs": [
+    { "epoch": 1, "reward": 4.7067 },
+    { "epoch": 2, "reward": 5.5267 },
+    { "epoch": 3, "reward": 4.6217 },
+    { "epoch": 4, "reward": 5.2217 },
+    { "epoch": 5, "reward": 4.2200 },
+    { "epoch": 6, "reward": 5.2200 },
+    { "epoch": 7, "reward": 5.1683 },
+    { "epoch": 8, "reward": 5.1033 },
+    { "epoch": 9, "reward": 4.8633 },
+    { "epoch": 10, "reward": 4.5783 },
+    { "epoch": 11, "reward": 4.4933 },
+    { "epoch": 12, "reward": 5.6267 },
+    { "epoch": 13, "reward": 5.0783 },
+    { "epoch": 14, "reward": 5.1267 },
+    { "epoch": 15, "reward": 5.5400 },
+    { "epoch": 16, "reward": 4.7267 },
+    { "epoch": 17, "reward": 5.0517 },
+    { "epoch": 18, "reward": 5.1067 },
+    { "epoch": 19, "reward": 4.9850 },
+    { "epoch": 20, "reward": 5.1467 }
+  ]
+}
