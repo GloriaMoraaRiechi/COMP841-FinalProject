@@ -1,256 +1,196 @@
-# Using Reinforcement Learning to Improve Physical Design Routing
+# Using Reinforcement Learning to improve Physical Design Routing
 
-This project implements a reinforcement learning based routing pipeline for integrated circuit (IC) physical design. The final version uses a learned **Cleaner CNN** to identify problematic nets and a learned **Router CNN** trained with supervised imitation and REINFORCE to reroute nets on congested grid-routing problems.
-
-The implementation is fully contained in this final package and includes the core routing environment, neural network models, training scripts, benchmark pipeline, and saved result plots.
-
----
-
-## Project Goal
-
-Physical design routing connects circuit pins using wires while reducing congestion, overlap, and unnecessary wirelength. Traditional methods such as A* and PathFinder are useful baselines, but this project explores whether a learned cooperative pipeline can improve routing completion by learning which nets to remove and how to reroute them.
-
-The final pipeline compares:
-
-- Initial independent A* routing
-- PathFinder baseline
-- Cleaner-only learned pipeline
-- Router-only learned pipeline
-- Full learned pipeline without RL
-- Full learned pipeline with RL
-
----
-
-## Final Implementation Pipeline
-
-### 1. Dataset Generation
-
-`dataset_generation.py` creates fixed-seed routing instances for reproducible training and testing. The final benchmark run used:
-
-- 20,000 generated routing instances
-- 10 × 10 grid size
-- 5 nets per instance
-- Minimum Manhattan distance of 3
-- Fixed benchmark test seed
-- 200 benchmark test cases
-
-### 2. Routing Environment
-
-`routing_env.py` defines the grid-routing environment, including:
-
-- Grid representation
-- Net and pin placement
-- A* routing baseline
-- Pin-aware overlap calculation
-- Reward and overlap reduction logic
-- Oracle rerouting utilities
-
-### 3. Neural Network Models
-
-`models.py` defines the learned models:
-
-- **CleanerScoringCNN**: scores nets and selects which congested net should be removed.
-- **RouterPolicyValueNet**: predicts routing actions and estimates value during routing.
-
-The CNN components are implemented using the custom NumPy neural network framework in `nn.py`.
-
-### 4. Cleaner Training
-
-`train_cleaner.py` trains the Cleaner CNN using supervised learning. The Cleaner learns to identify the net that is most useful to remove for reducing congestion.
-
-### 5. Router Training
-
-`train_router.py` trains the Router CNN in two stages:
-
-1. **Supervised imitation learning**, where the router learns from generated routing behavior.
-2. **REINFORCE fine-tuning**, where the router is further optimized using reward feedback from full routing episodes.
-
-### 6. Search and Rerouting
-
-`search_utils.py` provides greedy, beam-search, and top-K search utilities. These are used to evaluate possible learned routing decisions during inference.
-
-### 7. Full Pipeline Evaluation
-
-`pipeline.py` combines the Cleaner and Router into a full iterative rip-up-and-reroute pipeline. `main.py` orchestrates the complete workflow:
-
-1. Generate dataset
-2. Train Cleaner CNN
-3. Train Router CNN with supervised learning
-4. Fine-tune Router with REINFORCE
-5. Run benchmark comparisons
-6. Run ablation studies
-7. Save summary metrics and plots
-
----
-
-## Final Results
-
-The final benchmark used **200 fixed-seed test cases** from a 20,000-instance run.
-
-## Results
-
-### Completion Rate
-
-- A*: 0.04  
-- Pathfinder: 0.33  
-- Full Pipeline: 0.45  
-
-The learned pipeline achieves the highest completion rate, outperforming both A* and Pathfinder.
-
----
-
-### Overlap (lower is better)
-
-- A*: 4.26  
-- Pathfinder: 1.05  
-- Full Pipeline: 1.78  
-
-The pipeline significantly reduces routing conflicts, though Pathfinder achieves the lowest overlap.
-
----
-
-### Wirelength
-
-- A*: 36.2  
-- Pathfinder: 38.4  
-- Full Pipeline: 40.2  
-
-The learned approach results in higher wirelength, indicating a tradeoff between completion and efficiency.
-
----
-
-### Model Accuracy
-
-- Cleaner: 95.0% (test)  
-- Router: 95.7% (test)  
-
-Both models demonstrate strong predictive performance.
-
----
-
-## Discussion
-
-The results highlight a key tradeoff in routing:
-
-- Classical methods optimize local path efficiency  
-- The RL pipeline prioritizes global solvability  
-
-The learned system is able to solve more routing instances at the cost of slightly longer paths. This makes it more suitable for complex routing scenarios where feasibility is more important than optimality.
-
----
-
-## Result Files
-
-The final result outputs are stored in `result/`.
-
-```text
-result/
-├── benchmark_summary.json
-└── plots/
-    ├── ablation.png
-    ├── benchmark_completion.png
-    ├── benchmark_overlap.png
-    ├── benchmark_wirelength.png
-    ├── cleaner_training.png
-    ├── dataset_stats.png
-    ├── router_reinforcement_training_completion.png
-    ├── router_reinforcement_training_overlap.png
-    └── router_sl_training.png
-```
-
-These figures summarize dataset statistics, training behavior, benchmark performance, and ablation results.
-
----
-
-## Repository Structure
-
-```text
-COMP841-Final_Project_v3/
-├── main.py                         # Final orchestrator for training, RL, benchmarking, and plots
-├── pipeline.py                     # Full learned routing pipeline and ablation methods
-├── routing_env.py                  # Grid environment, A*, overlap metrics, and rewards
-├── dataset_generation.py           # Reproducible dataset generation
-├── models.py                       # Cleaner CNN and Router policy-value network
-├── nn.py                           # Custom NumPy neural network layers and optimizer
-├── search_utils.py                 # Greedy, beam, and top-K search utilities
-├── train_cleaner.py                # Cleaner CNN training
-├── train_router.py                 # Router supervised + REINFORCE training
-├── requirements.txt                # Python dependencies
-├── README.md                       # Project documentation
-└── result/
-    ├── benchmark_summary.json      # Final benchmark metrics
-    └── plots/                      # Generated result figures
-```
+CNN Cleaner + REINFORCE-trained Router pipeline for grid-based routing,
+benchmarked against A\* and PathFinder.
 
 ---
 
 ## Setup
 
-Install the required packages:
+### Requirements
+- Python 3.9 or newer
+- ~1 GB free disk space (for dataset cache + checkpoints)
 
+## NB: The dataset could be found here: 
+https://drive.google.com/file/d/17oGLWi4qBNZigUBn_iJnUQwTvwczLG4M/view?usp=drive_link
+
+
+### Install
 ```bash
+# 1. Clone or unzip the project, then enter the directory
+cd COMP841-FinalProject
+
+# 2. (Recommended) create a virtual environment
+python -m venv venv
+source venv/bin/activate         # Linux / macOS
+# venv\Scripts\activate          # Windows PowerShell
+
+# 3. Install dependencies
 pip install -r requirements.txt
 ```
 
-The required dependencies are listed in `requirements.txt` and include:
-
-- NumPy
-- Matplotlib
-- tqdm
+The only dependencies are `numpy`, `matplotlib`, `networkx`, and `scipy`.
+There is **no PyTorch / TensorFlow / GPU requirement** — the project
+implements its CNNs from scratch using NumPy.
 
 ---
 
-## Running the Final Pipeline
+## Test (uses pre-trained checkpoints in `results/checkpoints/`)
 
-To reproduce the final implementation workflow, run:
+The package ships with trained checkpoints from a 20,000-instance training
+run. To verify everything works without retraining:
+
+### 1. Solve a single 10x10 / 5-net problem and render the figure
 
 ```bash
-python main.py \
-    --num_instances 20000 \
-    --grid_sizes 10 \
-    --num_nets 5 \
-    --min_manhattan 3 \
-    --cleaner_epochs 30 \
-    --router_epochs 25 \
-    --cleaner_width 32 \
-    --router_width 32 \
-    --rl_episodes 1500 \
-    --rl_lr 2e-5 \
-    --rl_bc_coef 0.2 \
-    --rl_entropy 0.005 \
+python solve_and_visualize.py \
+    --grid_size 10 \
+    --nets_json '[[[1,1],[8,8]],[[1,8],[8,1]],[[2,3],[7,3]],[[3,6],[7,6]],[[4,2],[4,7]]]' \
+    --cleaner_ckpt results/checkpoints/cleaner_best.npz \
+    --router_ckpt  results/checkpoints/router_production.npz \
+    --method learned_cleaner_learned_router \
     --rounds 5 \
     --beam_width 4 \
-    --benchmark_cap 200
+    --out results/case_1.png \
+    --save_json
 ```
 
-For a smaller test run:
+After the command finishes (~10 seconds), look at:
+
+- **`results/case_1.png`** — side-by-side "Before vs After" rendering. The
+  left panel shows the initial A\* routing (with overlapping cells shaded
+  pink). The right panel shows the cleaned routing after the pipeline runs.
+- **`results/case_1.json`** — same record in JSON: net pin coordinates, the
+  paths the system chose, before/after overlap counts and wirelengths, and
+  the order in which nets were ripped up.
+
+The console will print something like:
+
+```
+Before overlap : 4    wire : 32
+After  overlap : 0    wire : 38
+Zero-overlap success: True
+Chosen nets: [3, 1]
+Figure saved to results/case_1.png
+```
+
+### 2. Compare the pipeline against A\* and PathFinder on same problem
+
+The same script accepts other methods. Run any case three times with
+different `--method` values and `--out` paths to produce side-by-side
+comparison figures:
 
 ```bash
-python main.py --num_instances 5000 --cleaner_epochs 15 --router_epochs 15 --rl_episodes 500
+# Pure A* (independent shortest paths, no conflict handling)
+python solve_and_visualize.py --grid_size 10 \
+    --nets_json '[[[1,1],[8,8]],[[1,8],[8,1]],[[2,3],[7,3]],[[3,6],[7,6]],[[4,2],[4,7]]]' \
+    --cleaner_ckpt results/checkpoints/cleaner_best.npz \
+    --router_ckpt  results/checkpoints/router_production.npz \
+    --method initial --out results/case_1_astar.png
+
+# PathFinder negotiation-based router (classical baseline)
+python solve_and_visualize.py --grid_size 10 \
+    --nets_json '[[[1,1],[8,8]],[[1,8],[8,1]],[[2,3],[7,3]],[[3,6],[7,6]],[[4,2],[4,7]]]' \
+    --cleaner_ckpt results/checkpoints/cleaner_best.npz \
+    --router_ckpt  results/checkpoints/router_production.npz \
+    --method pathfinder --out results/case_1_pathfinder.png
+
+# Our full ML pipeline
+python solve_and_visualize.py --grid_size 10 \
+    --nets_json '[[[1,1],[8,8]],[[1,8],[8,1]],[[2,3],[7,3]],[[3,6],[7,6]],[[4,2],[4,7]]]' \
+    --cleaner_ckpt results/checkpoints/cleaner_best.npz \
+    --router_ckpt  results/checkpoints/router_production.npz \
+    --method learned_cleaner_learned_router --out results/case_1_ours.png
 ```
 
 ---
 
-## Interpretation
+## Where to look at the results
 
-The results show that the learned pipeline improves routing completion compared with both initial A* routing and PathFinder on the final benchmark. PathFinder achieves the lowest residual overlap, but the full learned pipeline achieves the highest completion rate. The ablation confirms that the Cleaner CNN is the largest contributor, while the Router CNN and REINFORCE fine-tuning provide additional improvement when combined into the final pipeline.
+Pre-computed training and benchmark artifacts from the 20k-instance run
+ship inside `results/`:
+
+| File | Contents |
+|---|---|
+| `results/plots/cleaner_training.png` | Cleaner CNN training curves (loss, train/val accuracy) |
+| `results/plots/router_sl_training.png` | Router CNN supervised-learning curves |
+| `results/plots/router_rl_training.png` | Router REINFORCE training curves (4 panels) |
+| `results/plots/benchmark_completion.png` | Headline result — completion rate vs A\* and PathFinder |
+| `results/plots/benchmark_overlap.png` | Avg residual overlap (lower is better) |
+| `results/plots/benchmark_wirelength.png` | Avg total wirelength |
+| `results/plots/ablation.png` | 4-row ablation chart |
+| `results/plots/dataset_stats.png` | Train / val / test sample counts |
+| `results/benchmark_summary.json` | All numbers above as JSON |
+| `results/checkpoints/` | Trained model weights (`cleaner_best.npz`, `router_sl.npz`, `router_production.npz`) |
+
+**Headline result** (200 fixed-seed test instances, 10x10 grids, 5 nets):
+
+| Method | Completion | Avg overlap | Avg wirelength |
+|---|---|---|---|
+| A\* (independent) | 0.045 | 4.26 | 36.2 |
+| PathFinder (baseline) | 0.325 | 1.05 | 38.4 |
+| **Full Pipeline (ours)** | **0.420** | 1.84 | 40.1 |
 
 ---
 
-## Conclusion
+## Reproducing the full training run (optional, ~5 hours on a modern CPU)
 
-The Cleaner–Router reinforcement learning pipeline improves routing completion compared to traditional methods. While it introduces a wirelength tradeoff, it demonstrates strong potential for handling complex routing problems.
+If you want to retrain from scratch instead of using the supplied
+checkpoints:
+
+```bash
+python main.py
+```
+
+The defaults match the supplied checkpoints: 20,000 instances, 10x10 grids,
+5 nets, 30 cleaner epochs, 25 router SL epochs, 1500 RL episodes.
+
+For a faster sanity-check run (~30 minutes, smaller numbers but correct
+qualitative behaviour):
+
+```bash
+python main.py --num_instances 2000 --cleaner_epochs 10 --router_epochs 10 --rl_episodes 200
+```
+
+All training output is written to `results/` by default. Use
+`--out_root some/other/dir` to change.
 
 ---
 
-## Reference
+## What's in the package
 
-Gandhi, U., Bustany, I., Swartz, W., & Behjat, L. (2019). *A reinforcement learning-based framework for solving physical design routing problem in the absence of large test sets*. ACM/IEEE Workshop on Machine Learning for CAD (MLCAD), 1–6.
+| File | Purpose |
+|---|---|
+| `nn.py` | NumPy CNN library (Conv2D, ReLU, Linear, Adam). Gradient-checked. |
+| `routing_env.py` | A\*, pin-aware overlap rule, oracle reroute. |
+| `dataset_generation.py` | Fixed-seed test set (seed=12345) for reproducible benchmarks. |
+| `models.py` | CleanerScoringCNN + RouterPolicyValueNet. |
+| `train_cleaner.py` | Listwise + pairwise loss, warmup+cosine LR. |
+| `train_router.py` | SL imitation + REINFORCE on full multi-net episodes. |
+| `search_utils.py` | Greedy / beam / top-K beam search. |
+| `pipeline.py` | All methods. Accept-only-if-better gate, best-of-K reroute, iterative multi-rip. |
+| `plotting.py` | Training curves, benchmark bars, ablation chart. |
+| `solve_and_visualize.py` | CLI to solve a custom problem and render the figure. |
+| `main.py` | Orchestrator: dataset → cleaner → router SL → router RL → benchmark → ablation. |
+| `resume_rl.py` | Skip cleaner/router retraining; run RL + benchmark + ablation only. |
 
 ---
 
-## Authors
+## Troubleshooting
 
-- Gloria Riechi, Computational Data Science and Engineering, North Carolina A&T State University
-- Deriech Cummings, Electrical and Computer Engineering, North Carolina A&T State University
-- Natnael Workneh, Electrical and Computer Engineering, North Carolina A&T State University
+**`FileNotFoundError: results/checkpoints/cleaner_best.npz`** — the
+checkpoints are inside the package's `results/checkpoints/` directory.
+Make sure you `cd` into `routing_rl_package` first, so your working
+directory contains both `solve_and_visualize.py` and the `results/` folder.
+
+**`SyntaxWarning: invalid escape sequence`** — harmless. Comes from a
+Python 3.12 stricter check on docstrings, does not affect output.
+
+**The output figure looks empty / blank** — verify the `--out` directory
+exists. The script does not create intermediate directories. For example,
+`--out results/case_1.png` requires `results/` to exist (it does in the
+shipped package).
+
+**Slow on the first run** — generating the dataset for `main.py` takes a
+few minutes for 20,000 instances. `solve_and_visualize.py` does not
+generate any dataset and runs in seconds.
