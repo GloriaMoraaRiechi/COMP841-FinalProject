@@ -2,6 +2,7 @@
 
 CNN Cleaner + REINFORCE-trained Router pipeline for grid-based routing,
 benchmarked against A\* and PathFinder.
+A deep learning framework for physical design routing that combines supervised learning and reinforcement learning to solve grid-based VLSI net routing problems.
 
 ---
 
