@@ -1,8 +1,6 @@
 # Using Reinforcement Learning to Improve Physical Design Routing
 
-This project implements a reinforcement learning based routing pipeline for integrated circuit (IC) physical design. The final version uses a learned **Cleaner CNN** to identify problematic nets and a learned **Router CNN** trained with supervised imitation and REINFORCE to reroute nets on congested grid-routing problems.
-
-The implementation is fully contained in this final package and includes the core routing environment, neural network models, training scripts, benchmark pipeline, and saved result plots.
+A deep learning framework for physical design routing that combines supervised learning and reinforcement learning to solve grid-based VLSI net routing problems.
 
 ---
 
